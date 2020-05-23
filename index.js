@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-05-21 15:27:19
- * @LastEditTime: 2020-05-23 10:54:01
+ * @LastEditTime: 2020-05-23 11:24:36
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \compontents\src\directive\index.js
@@ -117,8 +117,12 @@ export const imgView = {
             Vm.$root.dom.imgSrc = binding.value || [el.getAttribute('src')];
 
             for (let [i, v] of Vm.$root.dom.imgSrc.entries()) {
-                if (v == el.getAttribute('src')) {
-                    Vm.$root.currentIndex = i
+                if (el.getAttribute('src')) {
+                    if (v == el.getAttribute('src')) {
+                        Vm.$root.currentIndex = i
+                    }
+                } else {
+                    Vm.$root.currentIndex = 0;
                 }
             }
 

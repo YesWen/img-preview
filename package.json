@@ -1,0 +1,19 @@
+{
+  "name": "img-perview",
+  "version": "1.0.0",
+  "description": "code",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YeShiwen/img-perview.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YeShiwen/img-perview/issues"
+  },
+  "homepage": "https://github.com/YeShiwen/img-perview#readme"
+}
