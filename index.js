@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-05-21 15:27:19
- * @LastEditTime: 2020-05-23 11:36:52
+ * @LastEditTime: 2020-05-23 15:53:28
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \compontents\src\directive\index.js
@@ -113,9 +113,44 @@ export const imgPreview = {
         Vm.$root.dom = {
             wrap_el: '', preview_close: '', img_prev: '', img_next: '', img_canvas: '', imgSrc: '', currentIndex: 0
         }
+
+        const createImgpreview = (() => {
+            return (args) => {
+                if (!Vm.$root.dom.wrap_el) {
+                    Vm.$root.dom.wrap_el = document.createElement('div');
+                    Vm.$root.dom.wrap_el.id = 'yes-image-viewer__wrap';
+                    Vm.$root.dom.wrap_el.innerHTML = `
+                    <div class="yes-image-viewer__mask"></div>
+                    <span id="preview_close" class="yes-image-viewer__close yew-image-viewer__btn">
+                        <i></i>
+                    </span>
+                    <span id="img_prev" class="yes-image-viewer__prev yew-image-viewer__btn">
+                        <i></i>
+                    </span>
+                    <span id="img_next" class="yes-image-viewer__next yew-image-viewer__btn">
+                        <i></i>
+                    </span>
+                    <div class="yes-image-viewer__actions yew-image-viewer__btn">
+                        <div class="yes-image-viewer__actions__inner">
+                            <i onclick="_handleActions('zoomOut')"></i>
+                            <i onclick="_handleActions('zoomIn')"></i>
+                            <i></i>
+                            <i onclick="_handleActions('clocelise')"></i>
+                            <i onclick="_handleActions('anticlocelise')" ></i>
+                        </div>
+                    </div>
+                    <div class="yes-image-viewer__canvas" >
+                        <img src="${Vm.$root.dom.imgSrc[Vm.$root.currentIndex]}"  id="img-canvas" onmousedown="handleMouseDown(event)"  />
+                    </div>
+                    `
+                    Vm.$root.dom.wrap_el.style.display = 'none';
+                    document.body.appendChild(Vm.$root.dom.wrap_el);
+                }
+                return Vm.$root.dom.wrap_el
+            }
+        })()
         const _handleClick = () => {
             Vm.$root.dom.imgSrc = binding.value || [el.getAttribute('src')];
-
             for (let [i, v] of Vm.$root.dom.imgSrc.entries()) {
                 if (el.getAttribute('src')) {
                     if (v == el.getAttribute('src')) {
@@ -126,58 +161,24 @@ export const imgPreview = {
                 }
             }
 
-            if (Vm.$root.dom.wrap_el) {
-                Vm.$root.dom.wrap_el.style.display = 'block';
-                Vm.$root.dom.img_canvas.src = Vm.$root.dom.imgSrc[Vm.$root.currentIndex];
-            } else {
+            let preview = createImgpreview();
+            preview.style = 'block';
 
-                let imgWrap = document.createElement('div');
+            Vm.$root.dom.wrap_el = document.getElementById('yes-image-viewer__wrap');
+            Vm.$root.dom.preview_close = document.getElementById('preview_close');
+            Vm.$root.dom.img_prev = document.getElementById('img_prev');
+            Vm.$root.dom.img_next = document.getElementById('img_next');
+            Vm.$root.dom.img_canvas = document.getElementById('img-canvas');
 
-                imgWrap.id = 'yes-image-viewer__wrap';
-                imgWrap.innerHTML = `
-                <div class="yes-image-viewer__mask"></div>
-                <span id="preview_close" class="yes-image-viewer__close yew-image-viewer__btn">
-                    <i></i>
-                </span>
-                <span id="img_prev" class="yes-image-viewer__prev yew-image-viewer__btn">
-                    <i></i>
-                </span>
-                <span id="img_next" class="yes-image-viewer__next yew-image-viewer__btn">
-                    <i></i>
-                </span>
-                <div class="yes-image-viewer__actions yew-image-viewer__btn">
-                    <div class="yes-image-viewer__actions__inner">
-                        <i onclick="_handleActions('zoomOut')"></i>
-                        <i onclick="_handleActions('zoomIn')"></i>
-                        <i></i>
-                        <i onclick="_handleActions('clocelise')"></i>
-                        <i onclick="_handleActions('anticlocelise')" ></i>
-                    </div>
-                </div>
-                <div class="yes-image-viewer__canvas" >
-                    <img src="${Vm.$root.dom.imgSrc[Vm.$root.currentIndex]}"  id="img-canvas" onmousedown="handleMouseDown(event)"  />
-                </div>
-                `
-                document.body.appendChild(imgWrap);
-                Vm.$root.dom.wrap_el = document.getElementById('yes-image-viewer__wrap');
-                Vm.$root.dom.preview_close = document.getElementById('preview_close');
-                Vm.$root.dom.img_prev = document.getElementById('img_prev');
-                Vm.$root.dom.img_next = document.getElementById('img_next');
-                Vm.$root.dom.img_canvas = document.getElementById('img-canvas');
-
-                on(Vm.$root.dom.preview_close, 'click', _close);
-                on(Vm.$root.dom.img_prev, 'click', _prev);
-                on(Vm.$root.dom.img_next, 'click', _next);
-                on(Vm.$root.dom.wrap_el, mousewheelEventName, _mouseWheelHandler);
-
-            }
-
+            on(Vm.$root.dom.preview_close, 'click', _close);
+            on(Vm.$root.dom.img_prev, 'click', _prev);
+            on(Vm.$root.dom.img_next, 'click', _next);
+            on(Vm.$root.dom.wrap_el, mousewheelEventName, _mouseWheelHandler);
         }
 
-        const _close = (e) => {
+        const _close = () => {
             Vm.$root.dom.wrap_el.style.display = 'none';
         }
-
         const _prev = () => {
             if (Vm.$root.currentIndex == 0 || Vm.$root.dom.imgSrc.length == 1) return
             Vm.$root.currentIndex--
@@ -189,6 +190,7 @@ export const imgPreview = {
             Vm.$root.currentIndex++
             Vm.$root.dom.img_canvas.src = Vm.$root.dom.imgSrc[Vm.$root.currentIndex];
         }
+
         on(el, 'click', _handleClick);
     },
     unbind() { }
