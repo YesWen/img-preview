@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-05-21 15:27:19
- * @LastEditTime: 2020-05-23 11:24:36
+ * @LastEditTime: 2020-05-23 11:36:52
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \compontents\src\directive\index.js
@@ -106,7 +106,7 @@ const imgStyle = () => {
 }
 
 
-export const imgView = {
+export const imgPreview = {
 
     inserted(el, binding, vnode) {
 
