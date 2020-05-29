@@ -85,7 +85,7 @@ const imgStyle = () => {
     margin-top: ${offsetY}px`;
     return style;
 }
-const CreateDom = () => {
+const CreateDom = function () {
     Vm.$root.dom.wrap_el = document.createElement('div');
     Vm.$root.dom.wrap_el.id = 'yes-image-viewer__wrap';
     Vm.$root.dom.wrap_el.innerHTML = `
@@ -116,6 +116,7 @@ const CreateDom = () => {
     document.body.appendChild(Vm.$root.dom.wrap_el);
     return Vm.$root.dom.wrap_el
 }
+
 CreateDom.setUrl = () => {
     Vm.$root.dom.img_canvas.src = Vm.$root.dom.imgSrc[Vm.$root.dom.currentIndex];
 }
@@ -159,18 +160,14 @@ export const imgPreview = {
                     Vm.$root.dom.currentIndex = 0;
                 }
             }
-
             let preview = CreateDom.getSingle();
             preview.style = 'block';
-
             Vm.$root.dom.wrap_el = document.getElementById('yes-image-viewer__wrap');
             Vm.$root.dom.preview_close = document.getElementById('preview_close');
             Vm.$root.dom.img_prev = document.getElementById('img_prev');
             Vm.$root.dom.img_next = document.getElementById('img_next');
             Vm.$root.dom.img_canvas = document.getElementById('img-canvas');
-
             CreateDom.setUrl()
-
             on(Vm.$root.dom.preview_close, 'click', CreateDom.__close);
             on(Vm.$root.dom.img_prev, 'click', CreateDom._prev);
             on(Vm.$root.dom.img_next, 'click', CreateDom._next);
